@@ -15,8 +15,9 @@ builder.Services.AddDbContext<VideoGameDbContext>(options => options.UseSqlServe
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-//Add - Migration Initial
-//Update - Database
+//Add-Migration Initial
+//Update-Database
+//to seed data Add-Migration Seeding
 if (app.Environment.IsDevelopment())
 {
     app.MapScalarApiReference();
