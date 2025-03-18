@@ -17,56 +17,65 @@ namespace VideoGameApi.Controllers
         }
 
 
-        //[HttpGet("{id}")]
-        //public ActionResult<List<VideoGame>> GetVideoGameById(int id)
-        //{
-        //    var game = videoGames.FirstOrDefault(x => x.Id == id);
-        //    if(game is null)
-        //    {
-        //        return NotFound();
-        //    }
+        [HttpGet("{id}")]
+        public async Task<ActionResult<List<VideoGame>>> GetVideoGameById(int id)
+        {
+            var game = await _context.VideoGames.FindAsync(id);
+            if (game is null)
+            {
+                return NotFound();
+            }
 
-        //    return Ok(game);
-        //}
+            return Ok(game);
+        }
 
-        //[HttpPost]
-        //public ActionResult<VideoGame> AddNewGame(VideoGame newGame)
-        //{
-        //    if (newGame is null)
-        //        return BadRequest();
-
-
-        //    newGame.Id = videoGames.Max(g => g.Id) + 1;
-        //    return CreatedAtAction(nameof(GetVideoGameById),  new { id= newGame.Id },newGame);
-        //}
-
-        //[HttpPut]
-        //public IActionResult UpdateVideoGame(int id, VideoGame updatedGame)
-        //{
-        //    var game = videoGames.FirstOrDefault(game => game.Id == id);
-
-        //    if(game is null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    game.Title = updatedGame.Title;
-        //    game.Publisher = updatedGame.Publisher;
-        //    game.Developer = updatedGame.Developer;
-        //    game.Platform = updatedGame.Platform;
-
-        //    return NoContent();
-        //}
+        [HttpPost]
+        public async Task<ActionResult<VideoGame>> AddNewGame(VideoGame newGame)
+        {
+            if (newGame is null)
+                return BadRequest();
 
 
-        //[HttpDelete]
-        //public IActionResult DeleteVideoGame(int id)
-        //{
-        //    var game = videoGames.FirstOrDefault(game => game.Id == id);
-        //    if (game is null)
-        //        return  NotFound();
-        //    videoGames.Remove(game);
-        //    return NoContent();
-        //}
+            _context.VideoGames.Add(newGame);
+
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction(nameof(GetVideoGameById), new { id = newGame.Id }, newGame);
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> UpdateVideoGame(int id, VideoGame updatedGame)
+        {
+            var game = await _context.VideoGames.FindAsync(id);
+
+            if (game is null)
+            {
+                return NotFound();
+            }
+
+            game.Title = updatedGame.Title;
+            game.Publisher = updatedGame.Publisher;
+            game.Developer = updatedGame.Developer;
+            game.Platform = updatedGame.Platform;
+
+
+            await _context.SaveChangesAsync();
+            return NoContent();
+        }
+
+
+        [HttpDelete]
+        public async Task<IActionResult> DeleteVideoGame(int id)
+        {
+            var game = await _context.VideoGames.FindAsync(id);
+            if (game is null)
+                return NotFound();
+
+
+            _context.VideoGames.Remove(game);
+
+            await _context.SaveChangesAsync();
+            return NoContent();
+        }
     }
 }
