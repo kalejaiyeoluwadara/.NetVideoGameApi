@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using VideoGameApi.Data;
 
@@ -11,9 +12,11 @@ using VideoGameApi.Data;
 namespace VideoGameApi.Migrations
 {
     [DbContext(typeof(VideoGameDbContext))]
-    partial class VideoGameDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250318164048_VideoGameDetailsRelationshipss")]
+    partial class VideoGameDetailsRelationshipss
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -82,38 +85,9 @@ namespace VideoGameApi.Migrations
                     b.Property<int>("VideoGameId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("VideoGameId1")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("VideoGameId");
-
-                    b.HasIndex("VideoGameId1")
-                        .IsUnique()
-                        .HasFilter("[VideoGameId1] IS NOT NULL");
-
                     b.ToTable("VideoGameDetails");
-                });
-
-            modelBuilder.Entity("VideoGameApi.Models.VideoGameDetails", b =>
-                {
-                    b.HasOne("VideoGameApi.Models.VideoGame", "VideoGame")
-                        .WithMany()
-                        .HasForeignKey("VideoGameId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("VideoGameApi.Models.VideoGame", null)
-                        .WithOne("VideoGameDetails")
-                        .HasForeignKey("VideoGameApi.Models.VideoGameDetails", "VideoGameId1");
-
-                    b.Navigation("VideoGame");
-                });
-
-            modelBuilder.Entity("VideoGameApi.Models.VideoGame", b =>
-                {
-                    b.Navigation("VideoGameDetails");
                 });
 #pragma warning restore 612, 618
         }

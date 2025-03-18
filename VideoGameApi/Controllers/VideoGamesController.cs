@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using VideoGameApi.Data;
+using VideoGameApi.Models;
 
 namespace VideoGameApi.Controllers
 {
@@ -13,7 +14,9 @@ namespace VideoGameApi.Controllers
         [HttpGet]
         public async Task<ActionResult<List<VideoGame>>> GetVideoGames()
         {
-            return Ok(await _context.VideoGames.ToListAsync());
+            return Ok(await _context.VideoGames
+                .Include(g=>g.VideoGameDetails)
+                .ToListAsync());
         }
 
 
